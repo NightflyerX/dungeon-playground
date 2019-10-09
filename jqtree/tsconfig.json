@@ -1,0 +1,15 @@
+{
+    "compileOnSave": false,
+    "exclude": ["_site", "node_modules"],
+    "compilerOptions": {
+        "moduleResolution": "node",
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "strictNullChecks": true,
+        "strict": true
+    }
+}
