@@ -67,8 +67,6 @@ if( isset( $_GET['logout'] ) && $_GET['logout'] == 'true' ){
 
 	<style type="text/css">
 		body{
-			width: 1907px;
-			height: 863px;
 			background: #000 url("img/EE8_3.jpg") no-repeat;
 			background-size: 100%;
 			font-size: 14px;

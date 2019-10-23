@@ -447,6 +447,8 @@ class game{
 
 				}else if( preg_match( '#char\[(.+?)\]#', $part, $matches ) ){
 					global $db;
+					global $l;
+					global $lang;
 					$new_game = new game( $db, $l, $lang );
 					(int) $char_id = is_numeric( $matches[1] ) ? $matches[1] : $new_game->get_user_id_by_name( $matches[1] );
 					
@@ -468,6 +470,8 @@ class game{
 					echo '$var = ';
 					var_dump($var);
 					var_dump($part);
+					echo "\n not found in this char: \n";
+					var_dump( $this->char );
 					trigger_error( 'Unexpected error ==> $part='.$part );
 					continue;
 						
@@ -528,6 +532,12 @@ class game{
 
 						continue;
 
+					}
+					
+					if( $tmpvar->path != $var_path ){
+						
+						continue;
+						
 					}
 				
 					$value = $tmpvar->modifier;
@@ -936,6 +946,7 @@ class game{
 				$this->armor->result_magical += (int) $this->get_armor( $this->char, $equipment, $equipment->magic_armor_formula, 'magical' );
 				$this->armor->tier_lvl = $equipment->tier_lvl[0]->tier_lvl_name;
 				$this->armor->object_id = $equipment->equipment_id;
+				$already_attached = false;
 
 				if( $equipment->tier_lvl[0]->affects_cost ){
 				
@@ -1566,7 +1577,7 @@ class game{
 			
 				$dmg['calc']->formula3 = $dmg['calc']->formula3 < 1 ? 1 : $dmg['calc']->formula3;
 
-				if( $dmg['affected_damage_pool'] == 'Life points' && $this->char->pools->lp_shield->cur > 0 ){
+				if( ( $dmg['affected_damage_pool'] == 'Life points' || $dmg['affected_damage_pool'] == 'Lebenspunkte' ) && $this->char->pools->lp_shield->cur > 0 ){
 
 					$dmg_to_shield = $dmg['calc']->formula3 > $this->char->pools->lp_shield->cur ? $this->char->pools->lp_shield->cur : $dmg['calc']->formula3;
 					$this->char->pools->lp_shield->cur -= $dmg_to_shield;
@@ -1772,8 +1783,21 @@ class game{
 			if( $char->leftright == $leftright ){
 
 				foreach( $type AS $key => $val ){
+				
+					$addval = $this->get_var( 'char.pools.'.$val.'.add' );
 					
-					$char->pools->{$val}->cur += $this->get_var( 'char.pools.'.$val.'.add' );
+					if( $addval > 0 ){
+						
+						if( $val != 'ap' && $val != 'move' ){
+							
+							$this->writeLog( $char->name.' regenerates '.$addval.' '.$val.' points', 0 );
+							
+						}
+						
+						$char->pools->{$val}->cur += $addval;
+						
+					}
+					
 					$cur = $this->get_var( 'char.pools.'.$val.'.cur' );
 					$max = $this->get_var( 'char.pools.'.$val.'.max' );
 					$char->pools->{$val}->cur = $cur > $max ? $max : $cur;
@@ -2308,6 +2332,8 @@ class game{
 	public function add_char_to_game( $char_id, $leftright ){
 
 		global $db;
+		global $l;
+		global $lang;
 
 		$in_game = false;
 		$char_string = '';		
@@ -2350,27 +2376,27 @@ class game{
 					
 					preg_match_all( '#('.$name.')\s?(\d)*\s?\|#', $char_string, $matches );
 					
-					
-
-array_multisort( $matches[2], SORT_ASC, SORT_NATURAL );
-
+					
+
+					array_multisort( $matches[2], SORT_ASC, SORT_NATURAL );
+
 
 					
-					if( !empty( $matches[2][count($matches[2])-1] ) ){
+					if( !empty( $matches[2][count($matches[2])-1] ) ){
 		
 						
 						$num = (int) $matches[2][count($matches[2])-1];
 						$num++;
-						$char->name = $name.' '.$num;
-
-
+						$char->name = $name.' '.$num;
 
 
-					}else{
+
+
+					}else{
 	
 
-						$char->name = $name.' 2';
-
+						$char->name = $name.' 2';
+
 	
 
 					}
@@ -2384,13 +2410,13 @@ array_multisort( $matches[2], SORT_ASC, SORT_NATURAL );
 				$char->leftright = $leftright;
 
 				$char->pools = (object) [
-					'life' => (object) 	['cur' => $char->life->current_life, 'max' => $char->life->max_life, 'add' => '0'],
-					'mana' => (object) 	['cur' => $char->mana->current_mana, 'max' => $char->mana->max_mana, 'add' => '0'],
-					'ap' => (object) 	['cur' => '100', 'max' => 100, 'add' => '100'],
-					'move' => (object) 	['cur' => '5', 'max' => 5, 'add' => '10'],
-					'poison' => (object) 	['cur' => '0', 'max' => 100, 'add' => '0'],
-					'sickness' => (object) 	['cur' => '0', 'max' => 100, 'add' => '0'],
-					'lp_shield' => (object) ['cur' => '0', 'max' => 1000, 'add' => '0'],
+					'life' => (object) 	['cur' => intval($char->life->current_life), 'max' => intval($char->life->max_life), 'add' => 0],
+					'mana' => (object) 	['cur' => intval($char->mana->current_mana), 'max' => intval($char->mana->max_mana), 'add' => 0],
+					'ap' => (object) 	['cur' => 100, 'max' => 100, 'add' => 100],
+					'move' => (object) 	['cur' => 5, 'max' => 5, 'add' => 10],
+					'poison' => (object) 	['cur' => 0, 'max' => 100, 'add' => 0],
+					'sickness' => (object) 	['cur' => 0, 'max' => 100, 'add' => 0],
+					'lp_shield' => (object) ['cur' => 0, 'max' => 1000, 'add' => 0],
 				];
 				
 				$char->controller_user_id = get_controller_user_id_by_name( $db, $char->controller );
@@ -2400,7 +2426,6 @@ array_multisort( $matches[2], SORT_ASC, SORT_NATURAL );
 
 				//$char->aktionspunkte = (object) ["current_ap" => "100", "max_ap" => "100"];
 				$char->states = [];
-				$char->tmpvars = [];
 				$char->tokens = [];
 				$char->special_tokens = [];
 				$char->resistances = (object) array();
@@ -2467,6 +2492,8 @@ array_multisort( $matches[2], SORT_ASC, SORT_NATURAL );
 				$game_obj->calculate_armor();
 
 				$this->game->chars[] = $char;
+
+				$this->writelog( 'Character '.$char->name.' has joined the game', 0 );
 
 			}
 
@@ -2736,7 +2763,7 @@ array_multisort( $matches[2], SORT_ASC, SORT_NATURAL );
 	}
 
 	public function trigger_event( $event_time, $triggerer_id = 0, $target_id = 0, $action_type = '' ){
-
+		
 		foreach( $this->fields AS &$field ){
 			
 			if( !isset( $field->field_events ) ){
@@ -2768,7 +2795,7 @@ array_multisort( $matches[2], SORT_ASC, SORT_NATURAL );
 					} //Target isn't field-target, skip
 
 					if( $action_type != '' && isset( $event->data->trigger_action ) && !empty( $event->data->trigger_action ) && !in_array( $action_type, $event->data->trigger_action ) ){
-
+						
 						continue;
 
 					} //Action type doesn't match
@@ -2811,7 +2838,7 @@ array_multisort( $matches[2], SORT_ASC, SORT_NATURAL );
 	}
 
 	public function execute_event( $event_time, $field, $event, $target_id, $switch, $switch2, $switch3, $triggerer_id ){
-	
+		
 		if( $target_id != 0 && $switch === true ){
 			
 			$target_ids = [ $target_id ];

@@ -26,31 +26,31 @@ switch( $page ){
 		$data = json_decode($row['data']);
 
 		function cmp($a, $b){
-
-    
+
     
-			$types = array( 'Class ability' => 0, 'Physical action' => 1, 'Magical action' => 2, 'Potion_Item' => 3, 'Other_action' => 4, 'Diceroll' => 5 );
     
-
-    
+			$types = array( 'Class ability' => 0, 'Physical action' => 1, 'Magical action' => 2, 'Potion_Item' => 3, 'Other_action' => 4, 'Diceroll' => 5 );
     
 
-			if( $types[$a->action_type] != $types[$b->action_type] ){
-    
+    
+    
+
+			if( $types[$a->action_type] != $types[$b->action_type] ){
+    
         
 
-				return $types[$a->action_type] < $types[$b->action_type] ? -1 : 1;
-        
+				return $types[$a->action_type] < $types[$b->action_type] ? -1 : 1;
+        
     
 
-			}
-    
+			}
+    
     
 
 			return strcmp($a->action_name, $b->action_name) < 0 ? -1 : 1;
 
-		
-
+		
+
 }
 
 		
@@ -78,18 +78,18 @@ switch( $page ){
 
 		foreach( $data->chars AS &$char ){
 
-			if( !isset( $char->tmpvars ) && empty( $char->tmpvars ) ){
-
-				continue;
-
-			}
-
-			if( $char->leftright == "right" && $_SESSION['is_dm'] !== true ){
+			if( $char->leftright == "right" && $_SESSION['user_id'] !== $data->dungeonmaster_user_id  ){
 
 				$char->pools->life->cur = 1000;
 				$char->pools->life->max = 1000;
 				$char->pools->mana->cur = 1000;
 				$char->pools->mana->max = 1000;
+
+			}
+			
+			if( !isset( $char->states ) && empty( $char->states ) ){
+
+				continue;
 
 			}
 
@@ -152,14 +152,14 @@ switch( $page ){
 		$row = $result->fetch(PDO::FETCH_ASSOC);
 		$data = json_decode($row['fields']);
 
-		function cmp($a, $b){    
-       
+		function cmp($a, $b){    
+       
     
 
 			return strcmp($a->field_name, $b->field_name) < 0 ? -1 : 1;
 
-		
-
+		
+
 }
 
 		
@@ -168,5 +168,4 @@ switch( $page ){
 		echo json_encode($data);
 	break;
 }
-
 

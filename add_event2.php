@@ -213,7 +213,7 @@ $event_id = isset( $_GET['event_id'] ) ? (int) $_GET['event_id'] : 0;
 				</div>
 				<div class="col">
 					<div class="row">
-						<h5>Token</h5>
+						<h5>Damage type</h5>
 					</div>
 					<div class="row">
 						<select name="add_damage_type" id="add_damage_type" class="form-control"></select>

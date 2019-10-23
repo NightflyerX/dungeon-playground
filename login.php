@@ -5,7 +5,7 @@ include('language.php');
 
 include("dbconnect.php");
 
-define( "SECURITY_CODE", "some_security" );
+define( "SECURITY_CODE", "s2o4n6y8" );
 
 ?>
 <!doctype html>
@@ -63,8 +63,6 @@ define( "SECURITY_CODE", "some_security" );
 
 	<style type="text/css">
 		body{
-			width: 1907px;
-			height: 863px;
 			background: #000 url("img/EE8_3.jpg") no-repeat;
 			background-size: 100%;
 			font-size: 14px;

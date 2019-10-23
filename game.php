@@ -17,6 +17,7 @@ $users = get_users($db);
 
 $result = $db->query("SELECT * FROM game WHERE active=1 ");
 $counter = 0;
+$game = (object) array();
 foreach( $result AS $row ){
 
 	$game = json_decode($row['data']);
@@ -88,13 +89,18 @@ if( isset( $_SESSION['current_game_id'] ) && $_SESSION['current_game_id'] != 0 )
 
 			var creator = chars[y].creator;
 			<?
-			$dm_username = '';
 			
-			if( isset( $_SESSION['is_dm'] ) && $_SESSION['is_dm'] === true ){
+			if( isset( $game->dungeonmaster_username ) ){
 
-				$dm_username = $_SESSION['username'];
+				$dm_username = $game->dungeonmaster_username;
+
+			}else{
+
+				$dm_username = '';
 
 			}
+
+			
 			?>
 			var leftright = creator == "<?=$dm_username;?>" ? "right" : "left";
 			var is_dm = <? echo isset( $_SESSION['is_dm'] ) && $_SESSION['is_dm'] === true || $_SESSION['user_id'] == 1 ? 'true' : 'false';?>;

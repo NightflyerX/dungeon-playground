@@ -574,8 +574,6 @@ function get_tier_use( action, char, return_tier ){
 
 	<style>
 		body{
-			width: 1907px;
-			height: 863px;
 			background: #000 url("img/EE8_3.jpg") no-repeat;
 			background-size: 100%;
 			font-size: 14px;
