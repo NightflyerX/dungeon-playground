@@ -14,6 +14,45 @@ The Dungeon Playground is a free digital tool to calculate your actions in dice 
   Open the "login.php" and edit the SECURITY_CODE-constant. You (and your friends) will need this code to make a new account.
   Open the "security.php" and change the "ABSOLUTE_URL"-constant to the server address where you will upload the scripts.
   Upload the scripts and import the sql-file to your database. You are done.
+  
+# Weapons
+
+You can create weapons in Library->Weapons. Every weapon has a weapon type that refers to the weapon category. You can add physical or magical armor if this weapon should give you some. Additionally you can add modifiers that will affect the character that has this weapon equipped. Weapons do not have different tier levels when created. However you can set a tier level when adding a weapon to the shop. 
+
+# Items / Equipment
+
+You can create weapons in Library->Items/Equipment. Each equipment must have at least one tier level. Of course it is best to describe the equipments for all tier levels 1-5. One being built out of scrap and fife beeing forget with the best metal one can find. Logically a tier fife plate armor protects you much more than a tier two plate armor. 
+
+    Example: 
+    
+    Plate armor Tier 5:
+        char.pools.ap.add -15
+        char.resistances.physical sting +10
+        char.resistances.physical cut +10
+        
+    This armor is pretty heavy that is why not all 100 action points will be added each round. But it protects well against physical sting and cut damage. 
+    
+You can also define cost reduction. If an action costs a certain amount of for example mana, the equipment can help to reduce this number.
+
+    Example:
+    
+    Robe Tier 3:
+        affects_cost
+            mana -2
+        modifiers
+            char.resistances.Magic arcane magic +char.skills.defensive.robe.skill
+            char.resistances.Magic spiritual magic +char.skills.defensive.robe.skill
+            char.pools.mana.add +char.skills.defensive.robe.skill
+            
+    This piece of cloth lets you perform every action for two less mana. Additionally you get protection from arcane and spiritual magics by the amount of robe skill. And each round this robe helps you regenerate your mana pool by the value of robe skill.
+
+# The store
+
+In Campaign->Campaign show you can drag and drop items from the library to the left into your shop. Once in the shop every character can equip the items in Characters->Character list->Shop. When a character joins the game it will bring all the stuff equipped with it. Weapons, equipment and items do not change anymore when changed in the library. They are stored there.
+
+# Loot
+
+In the game you can click on a character and then on the Equipment-Button. You can there see a list of your equipment. Also you can claim weapons and equipment from the shop if there is any available. When claimed the equipment is stored in your backpack and NOT ACTIVE. To use it you also have to click on "equip". The head line will change color from gray (inactive) to green (active).
 
 # The Tree
 
@@ -73,7 +112,15 @@ Dicerolls are the simplest kind of actions. You won't need tier levels. Just wri
     
     1d20 + char.attributes.strength.mod + 3
     
-All the other actions have tier levels (normal, expert, master and grandmaster). A character can only do an action when he meets the requirements for that level. If you make a fire magic spell you want to set a filter in fire magic under magic filters. Set fire magic to normal in the normal tier, to experte in the expert tier and so on. Now the level of the action depends on the fire magic skill of the character. If the character is master then he can perform this action in the master level. If there are no filters then all characters can access the action, if they can pay the cost.
+For other actions the diceroll must result in 1 success or 0 fail. For that use the "<",">", ">=", "<=" operators, or use a percentual value.
+
+    Example:
+    
+    1d100 <= w_tier_lvl[30,50,55,60,65,70] + attribut + w_skill * 5 - target_armor_physical
+    1d100 <= 80 + m_skill - target_armor_magical
+    50%
+    
+All the other actions that dicerolls have tier levels (normal, expert, master and grandmaster). A character can only do an action when he meets the requirements for that level. If you make a fire magic spell you want to set a filter in fire magic under magic filters. Set fire magic to normal in the normal tier, to experte in the expert tier and so on. Now the level of the action depends on the fire magic skill of the character. If the character is master then he can perform this action up to the master level. If there are no filters then all characters can access the action, if they can pay the cost.
 
 # Effects
 
@@ -107,7 +154,7 @@ Fields are areas that affect characters. They may have an owner who may have to 
       {COUNT(char.special_tokens[fire token])}d4
     in the damage_formula.
     Now, when there is a new player round the target player gets a special token and every round he recieves 1d4 damage for each of these tokens.
-    
 
+Note: If you chose the on_made_damage-Event then you also have access to the "DAMAGE" keyword for your formula, where the value of the already dealt damage is stored.
     
       
