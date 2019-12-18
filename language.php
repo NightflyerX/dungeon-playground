@@ -71,6 +71,7 @@ $l = array(
 	"NAVBAR_LOGOUT" => "Logout",
 	"GAME_ROUND" => "Runde",
 	"GAME_NEXT_ROUND" => "N&auml;chste Runde",
+	"GAME_CHARMULTIDELETE" => "Char multil&ouml;sch",
 	"GAME_RESET" => "Reset",
 	"GAME_DELETE" => "Spiel beenden",
 	"GAME_NEW_FIELD" => "Neues Feld",
@@ -180,6 +181,7 @@ $l = array(
 	"NAVBAR_LOGOUT" => "Logout",
 	"GAME_ROUND" => "Round",
 	"GAME_NEXT_ROUND" => "Next Round",
+	"GAME_CHARMULTIDELETE" => "Char multidelete",
 	"GAME_RESET" => "Reset",
 	"GAME_DELETE" => "End Game",
 	"GAME_NEW_FIELD" => "New field",
@@ -269,4 +271,3 @@ $l = array(
 	)
 
 );
-

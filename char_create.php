@@ -417,7 +417,23 @@ var getjson = $.getJSON("getdata.php", {
 		tmp +='<input readonly="readonly" type="number" name="mod_attr_'+lib.attributes[x].name+'" id="mod_attr_'+lib.attributes[x].name+'" value="0" class="form-control"/>';
 		tmp += '<label for="potion_'+lib.attributes[x].name+'">Potion_'+lib.attributes[x].name+':</label>';
 		tmp +='<select name="potion_'+lib.attributes[x].name+'" id="potion_'+lib.attributes[x].name+'" class="form-control" onchange="update()">';
-		tmp += '<option value="0"></option><option value="50">50</option><option value="25">25</option><option value="10">10</option></select>';
+		tmp += `
+			<option value="0"></option>
+			<option value="50">50</option>
+			<option value="25">25</option>
+			<option value="20">20</option>
+			<option value="15">15</option>
+			<option value="10">10</option>
+			<option value="9">9</option>
+			<option value="8">8</option>
+			<option value="7">7</option>
+			<option value="6">6</option>
+			<option value="5">5</option>
+			<option value="4">4</option>
+			<option value="3">3</option>
+			<option value="2">2</option>
+			<option value="1">1</option>
+		</select>`;
 
 		$('#attr_container').append( tmp + '</div>' );
 		

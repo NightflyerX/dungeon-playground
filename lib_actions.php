@@ -26,6 +26,7 @@ include('header.php');
 
 			<button type="button" id="copy_tier" class="btn btn-info">copy tier data</button> 
 			<button type="button" id="copy_whole" class="btn btn-primary">copy action</button>
+			<button type="button" id="sortme" class="btn btn-success">sort actions</button>
 
 		</div>
 		<div class="col md-2">
@@ -486,7 +487,29 @@ $.getJSON("getdata.php", {
                                                                                 "char_name": {
                                                                                     "type": "string",
                                                                                     "enum": mk_array(chars, 'name')
-                                                                                }
+                                                                                },
+										"pool_preset": {
+											"type":"array",
+											"format":"table", 
+											"options": {
+                                                                            			"collapsed": true
+                                                                        		},
+                                                                        		"description": "effect summon character",
+											"items":{
+												"type":"object",
+												"format":"grid",
+												"properties":{
+													"pool_name":{
+														"type":"string",
+														"enum": mk_array(lib.pools)
+													},
+													"pool_value":{
+														"type":"string",
+														"format":"textarea"
+													}
+												}
+											}
+										}
                                                                             }
                                                                         },
                                                                         "propertyOrder": 13
@@ -667,6 +690,22 @@ $('#copy_whole').click(function() {
     editordata[editordata.length] = node;
 
     editor.setValue(editordata);
+});
+
+$('#sortme').click( function(){
+	
+	$.getJSON("getdata.php", {
+
+		page: 'get_actions',
+		sortme: 'sortme'
+
+	}).done(function(json) {
+		
+		alert( 'Sorting done. Please reload' );
+		
+	});
+	
+	
 });
 
 </script>

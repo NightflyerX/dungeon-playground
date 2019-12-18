@@ -503,7 +503,26 @@ function showplayer( game_id ){
 
 						if( $('#action_type').text() == 'Diceroll' ){
 
-							$.getJSON( 'setdata.php', { page : 'diceroll', char_id : char_id, dice_roll_formula : hit_chance_formula, data: data, writelog : true, info : { file : '<?= __FILE__;?>', line : '<?= __LINE__;?>' }, data : data }).done( function( res ){
+							var target_char_id = null;
+							var target_names = '';
+
+							$('.checkboxform input:checked').each( function(){
+
+								target_char_id = $(this).data("char-id");
+								target_names += 'to '+$('div.container-fluid.player.m-3.border.border-white[data-char-id=\''+target_char_id+'\'] h4').text();
+							});
+							console.log( $('#player_status h4') );
+
+							$.ajax({
+        							type: 'GET',
+        							url: 'chat.php',
+        							dataType: 'post',
+        							success: function() {},
+        							data: { new_chattext : '<div class="alert alert-info" style="font-size:12px;">'+action_name+' from '+$('#player_status h4').text()+' '+target_names+'</div>', user_id : 0 },
+        							async: false
+    							});
+
+							$.getJSON( 'setdata.php', { page : 'diceroll', char_id : char_id, target_char_id : target_char_id, dice_roll_formula : hit_chance_formula, data: data, writelog : true, info : { file : '<?= __FILE__;?>', line : '<?= __LINE__;?>' }, data : data }).done( function( res ){
 								
 								text = `
 									<span style="color:yellow;">${res.formula1}</span>
@@ -745,7 +764,7 @@ function showplayer( game_id ){
 			
 											}else if( res.formula3 == 1 ){
 												
-												if( $('#diceroll').text() == 'Tank' ){
+												if( $('#diceroll').text() == 'Tank' || $('#diceroll').text() == 'Tanken' ){
 													
 													$.getJSON("setdata.php", {
 														page: 'tank_player',

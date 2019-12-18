@@ -194,8 +194,8 @@ function showplayer( game_id ){
 									'<li class=\'text-danger\'><a href=\'#\' class=\'remove_state\' data-state=\''+char.states[x].id+'\'><?=$l[$lang]['SHOW_PLAYER_REMOVE_STATE'];?></a></li>'+
 								'</ul>';
 					
-						states += 	'<a tabindex="0" role="button" class="btn btn-dark btn-outline-light" style="height:30px;margin:1px;"'+
-								' data-toggle="popover" title="'+char.states[x].name+'" data-placement="bottom" data-content="'+content+'">'+
+						states += 	'<a tabindex="-1" role="button" class="btn btn-dark btn-outline-light" style="height:30px;margin:1px;"'+
+								' data-toggle="popover" title="'+char.states[x].name+'" data-placement="bottom" data-content="'+content+'" data-trigger="focus">'+
 									char.states[x].name+
 								'</a>';
 					
@@ -278,7 +278,7 @@ function showplayer( game_id ){
 
 				//$('#weapons_and_items').append( player_objects );
 				
-				$('[data-toggle="popover"]').popover({html:true,trigger: 'focus'});
+				$('[data-toggle="popover"]').popover({html:true,container:'#player_buttons',boundary:'#player_buttons'});
 
 				$('[data-toggle="popover"]').on('shown.bs.popover', function () {
 
@@ -705,7 +705,7 @@ function showplayer( game_id ){
 
 $(document).ready( function(){
 
-	$('[data-toggle="popover"]').popover({html:true,trigger: 'focus'});
+	$('[data-toggle="popover"]').popover({html:true,container: 'TB_ajaxContent',boundary:'viewport'});
 
 	$('[data-toggle="popover"]').on('shown.bs.popover', function () {
 

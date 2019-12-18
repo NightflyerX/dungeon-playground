@@ -3,7 +3,7 @@ error_reporting( E_ALL );
 
 if (!defined('__ABSOLUTE_URL__')) {
 
-	define("__ABSOLUTE_URL__","http://www.fyrobe-club-sisseln.ch/dungeon/index.php");
+	define("__ABSOLUTE_URL__","http://www.abs-uri.com/dir/index.php");
 
 }
 
